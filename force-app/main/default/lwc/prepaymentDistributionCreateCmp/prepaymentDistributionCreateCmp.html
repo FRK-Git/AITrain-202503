@@ -1,0 +1,174 @@
+<template>
+	<template if:true={isShow}>
+        <lightning-spinner id="spinner" alternative-text="Loading" size="medium"
+            class="slds-is-fixed"></lightning-spinner>
+    </template>
+
+	<lightning-modal-header label="Create Distribution"></lightning-modal-header>
+    <lightning-modal-body>
+    	<div style="min-height: 300px;">
+	    	<template lwc:if={distributionField}>
+		        <lightning-record-edit-form object-api-name="Prepayment_Distribution__c" onchange={handleMasterFieldChange}>
+		        	<lightning-layout multiple-rows="true" horizontal-align="space">
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Account_Name__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <template if:true={distributionObj}>
+		                                <lightning-input-field id="accName" field-name="Account__c" value={distributionObj.Account__c} variant="label-hidden" disabled="true">
+		                                </lightning-input-field>
+		                            </template>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Prepayment__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <template if:true={distributionObj}>
+		                                <lightning-input-field id="prep" field-name="Prepayment__c" value={distributionObj.Prepayment__c} variant="label-hidden" disabled="true">
+		                                </lightning-input-field>
+		                            </template>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<!-- <div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <abbr class="slds-required">*</abbr>
+		                            {distributionField.fields.Order__c.label}
+		                        </label> -->
+		                        <!-- <div class="slds-form-element__control slds-grow"> -->
+		                                <!-- <lightning-input-field id="order" field-name="Order__c" value={distributionObj.Order__c} variant="label-hidden" required="true">
+		                                </lightning-input-field> -->
+		                                <c-lookuplwc
+				                            icon="standard:record"
+				                            class="product-search-input"
+				                            selection={orderSelection}
+				                            errors={errors}
+				                            onsearch={handleLookupSearch}
+				                            onselectionchange={handleLookupSelectionChange}
+				                            label={distributionField.fields.Order__c.label}
+				                            placeholder="search Order..."
+				                            objtype="Order"
+				                            variant="label-inline"
+				                            is-default-search="true"
+				                            required="true"
+				                        >
+	                        			</c-lookuplwc>
+		                        <!-- </div>
+		                    </div> -->
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Order_Amount__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <lightning-formatted-number id="orderAmount" value={orderAmount} variant="label-hidden" format-style="currency" currency-display-as="code"></lightning-formatted-number>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Order_ERP_Number__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <lightning-formatted-text id="orderNumber" value={orderNumber} variant="label-hidden"></lightning-formatted-text>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Order_Status__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <lightning-formatted-text id="orderStatus" value={orderStatus} variant="label-hidden"></lightning-formatted-text>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Order_Distributed_Amount__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <lightning-formatted-number id="orderDistributedAmount" value={distributionObj.Order_Distributed_Amount__c} variant="label-hidden" format-style="currency" currency-display-as="code"></lightning-formatted-number>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <!-- <abbr class="slds-required">*</abbr> -->
+		                            {distributionField.fields.Order_Balanced_Amount__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <lightning-formatted-number id="orderBalancedAmount" value={distributionObj.Order_Balanced_Amount__c} variant="label-hidden" format-style="currency" currency-display-as="code"></lightning-formatted-number>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            <abbr class="slds-required">*</abbr>
+		                            {distributionField.fields.Prepayment_Distribution_Amount__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <template if:true={distributionObj}>
+		                                <lightning-input-field id="dpa" field-name="Prepayment_Distribution_Amount__c" value={distributionObj.Prepayment_Distribution_Amount__c} variant="label-hidden" required="true">
+		                                </lightning-input-field>
+		                            </template>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6">
+		                	<div class="slds-form-element_horizontal slds-form-element">
+		                        <label class="slds-form-element__label slds-no-flex" for="oppo">
+		                            {distributionField.fields.Remarks__c.label}
+		                        </label>
+		                        <div class="slds-form-element__control slds-grow">
+		                            <template if:true={distributionObj}>
+		                                <lightning-input-field id="remark" field-name="Remarks__c" value={distributionObj.Remarks__c} variant="label-hidden">
+		                                </lightning-input-field>
+		                            </template>
+		                        </div>
+		                    </div>
+		                </lightning-layout-item>
+		                <lightning-layout-item padding="around-small" size="12" large-device-size="6"></lightning-layout-item>
+		            </lightning-layout>
+		        </lightning-record-edit-form>
+		    </template>
+		</div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button
+            class="slds-button"
+            variant="neutral"
+            label="Cancel"
+            onclick={handleCancel}
+        ></lightning-button>
+        <lightning-button
+            class="slds-button slds-m-left_x-small"
+            variant="brand"
+            label="Save"
+            onclick={save}
+        ></lightning-button>
+    </lightning-modal-footer>
+</template>
