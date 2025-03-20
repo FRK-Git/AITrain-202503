@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prepayment_Distributed_Balanced_Check</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ !ISNULL(Prepayment_Distribution_Amount__c),
+ !ISNULL(Order_Balanced_Amount__c),
+ Prepayment_Distribution_Amount__c &gt; Order_Balanced_Amount__c  
+)</errorConditionFormula>
+    <errorMessage>Prepayment Distribution Amount cannot be greater than Order Balanced Amount.</errorMessage>
+</ValidationRule>

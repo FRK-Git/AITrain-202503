@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>100% before shipment date</fullName>
+        <default>false</default>
+        <label>100% before shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>30% down payment after PO date / 70% before shipment date</fullName>
+        <default>false</default>
+        <label>30% down payment after PO date / 70% before shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>100% after PO date</fullName>
+        <default>false</default>
+        <label>100% after PO date</label>
+    </customValue>
+    <customValue>
+        <fullName>30% down payment after PO date/ 70% 30 days after shipment date</fullName>
+        <default>false</default>
+        <label>30% down payment after PO date/ 70% 30 days after shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>30 days after shipment date</fullName>
+        <default>false</default>
+        <label>30 days after shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>45 days after shipment date</fullName>
+        <default>false</default>
+        <label>45 days after shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>60 days after shipment date</fullName>
+        <default>false</default>
+        <label>60 days after shipment date</label>
+    </customValue>
+    <customValue>
+        <fullName>Not applicable</fullName>
+        <default>false</default>
+        <label>Not applicable</label>
+    </customValue>
+    <masterLabel>付款方式</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

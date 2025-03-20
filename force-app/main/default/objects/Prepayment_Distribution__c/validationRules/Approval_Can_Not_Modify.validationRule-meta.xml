@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approval_Can_Not_Modify</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(  ISPICKVAL(Approval_Status__c , &apos;Approved&apos;), 
+OR(
+ ISCHANGED( Prepayment_Distribution_Amount__c ) ,
+ ISCHANGED( Order__c ) 
+)
+)</errorConditionFormula>
+    <errorMessage>This distribution record has been approved and cannot be modified!</errorMessage>
+</ValidationRule>

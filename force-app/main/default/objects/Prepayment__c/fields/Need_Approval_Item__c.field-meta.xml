@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Need_Approval_Item__c</fullName>
+    <externalId>false</externalId>
+    <label>Need Approval Item</label>
+    <summaryFilterItems>
+        <field>Prepayment_Distribution__c.Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>Draft, Rejected</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Prepayment_Distribution__c.Prepayment__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>
