@@ -1,0 +1,285 @@
+<apex:page showHeader="true" standardStylesheets="false" sidebar="false" applyHtmlTag="true" applyBodyTag="false" lightningStylesheets="false" docType="html-5.0" >
+
+	<html xmlns:v-model="https://cn.vuejs.org" xmlns:v-on="https://cn.vuejs.org" xmlns:v-bind="https://cn.vuejs.org" xmlns:v-for="https://cn.vuejs.org" xmlns:v-slot="https://cn.vuejs.org" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:slds />
+
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"></link>
+        <style type="text/css">
+
+            .el-header, .el-footer {
+			  background-color: #B3C0D1;
+			  color: #333;
+			  text-align: center;
+			  line-height: 60px;
+			}
+			
+			.el-aside {
+			  background-color: #D3DCE6;
+			  color: #333;
+			  text-align: center;
+			  line-height: 200px;
+			}
+			
+			.el-main {
+			  background-color: #E9EEF3;
+			  color: #333;
+			  text-align: center;
+			  line-height: 160px;
+			}
+			
+			body > .el-container {
+			  margin-bottom: 40px;
+			}
+			
+			.el-container:nth-child(5) .el-aside,
+			.el-container:nth-child(6) .el-aside {
+			  line-height: 260px;
+			}
+			
+			.el-container:nth-child(7) .el-aside {
+			  line-height: 320px;
+			}
+        </style>
+    </head>
+    <body>
+    	<div id="app" style="width: 100%;height: 100%;">
+    		<div style="height: 100%;">
+				<el-container style="border: 1px solid #eee">
+					<el-header>Header</el-header>
+					<el-container style="min-height: 670px;">
+				    	<el-aside width="200px">Aside</el-aside>
+				    	<el-container>
+						    <el-main>
+						    	<div style="width: 50%;margin-left: 20%;">
+							    	<el-form ref="form" v-bind:model="form" label-width="80px">
+									  <el-form-item label="活动名称">
+									    <el-input v-model:value="form.name"></el-input>
+									  </el-form-item>
+									  <el-form-item label="活动区域">
+									    <el-select v-model:value="form.region" placeholder="请选择活动区域">
+									      <el-option label="区域一" value="shanghai"></el-option>
+									      <el-option label="区域二" value="beijing"></el-option>
+									    </el-select>
+									  </el-form-item>
+									  <el-form-item label="活动时间">
+									    <el-col v-bind:span="11">
+									      <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
+									    </el-col>
+									    <el-col class="line" v-bind:span="2">-</el-col>
+									    <el-col v-bind:span="11">
+									      <el-time-picker placeholder="选择时间" v-model:value="form.date2" style="width: 100%;"></el-time-picker>
+									    </el-col>
+									  </el-form-item>
+									  <el-form-item label="即时配送">
+									    <el-switch v-model:value="form.delivery"></el-switch>
+									  </el-form-item>
+									  <el-form-item label="活动性质">
+									    <el-checkbox-group v-model:value="form.type">
+									      <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+									      <el-checkbox label="地推活动" name="type"></el-checkbox>
+									      <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+									      <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+									    </el-checkbox-group>
+									  </el-form-item>
+									  <el-form-item label="特殊资源">
+									    <el-radio-group v-model:value="form.resource">
+									      <el-radio label="线上品牌商赞助"></el-radio>
+									      <el-radio label="线下场地免费"></el-radio>
+									    </el-radio-group>
+									  </el-form-item>
+									  <el-form-item label="活动形式">
+									    <el-input type="textarea" v-model:value="form.desc"></el-input>
+									  </el-form-item>
+									</el-form>
+								</div>
+						    </el-main>
+						    <el-footer>
+						    	<el-button type="primary" v-on:click="onSubmit">立即创建</el-button>
+								<el-button type="danger" v-bind:round="true" v-on:click="isCancel">取消</el-button>
+							
+						    </el-footer>
+						</el-container>
+					</el-container>
+				</el-container>
+			</div>
+
+    	</div>
+    </body>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <apex:includeScript value="{!$Resource.Vue}" />
+    <script type="text/javascript">
+	const app = new Vue({
+		el: '#app',
+		data: {
+            form: {
+	          name: '',
+	          region: '',
+	          date1: '',
+	          date2: '',
+	          delivery: false,
+	          type: [],
+	          resource: '',
+	          desc: ''
+	        }
+        },
+        methods: {
+        	onSubmit: function() {
+        		console.log('submit!');
+        		console.log(JSON.stringify(this.form));
+        	},
+
+        	open: function() {
+        		this.$alert('这是一段内容', '标题名称', {
+		          confirmButtonText: '确定',
+		          callback: action => {
+		            this.$message({
+		              type: 'info',
+		              message: `action: ${ this.form.desc }`
+		            });
+		          }
+		        });
+		        
+        	},
+
+        	isCancel: function() {
+        		this.$confirm('是否确认取消?', '提示信息', {
+		          confirmButtonText: '确定',
+		          cancelButtonText: '取消',
+		          type: 'warning'
+		        }).then(() => {
+		          this.$message({
+		            type: 'success',
+		            message: '取消成功!'
+		          });
+		        }).catch(() => {
+		          this.$message({
+		            type: 'error',
+		            message: '取消失败!'
+		          });          
+		        });
+        	},
+
+        	initData: function() {
+        		// remoteAction('ElementUITestExtension.getService',  moment(info.start).format("YYYY-MM-DD"), moment(info.end).format("YYYY-MM-DD"), app.selectedUserIds, app.projectName ).then(data => {
+          //           console.log(data)
+          //           successCallback(data);
+
+          //           app.calendarDate = moment(calendar.view.currentStart).format('YYYY-MM-DD');
+
+          //       }).catch((error) => {
+          //           // alert(error);
+          //           new $Msg({
+          //               content: error,
+          //               type: "info",// info,success,wrong
+          //               showCancel: "none",//隐藏取消按钮
+          //               showIcon: false,
+          //               title: "提示"
+          //           });
+          //       }).finally(() => {});
+        	}
+        },
+        watch: {
+
+        },
+        computed: {
+
+        },
+        mounted: function() {
+        	this.initData();
+        }
+	});
+
+	/*
+     * 执行远程方法 最多5个参数
+     * @param methodName 方法名
+     * @param params 参数列表
+     * @author xj
+     */
+    function remoteAction(methodName, ...params) {
+        if (params != null && params != undefined && params.length > 0) {
+            if (params.length == 1) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 2) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 3) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 4) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], params[3], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 5) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], params[3], params[4], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else {
+                return new Promise((resove, reject) => {
+                    reject('参数过多不支持此方法!');
+                });
+            }
+        } else {
+             return new Promise((resove, reject) => {
+                Visualforce.remoting.Manager.invokeAction(methodName, ...params, (data, event) => {
+                    if (event.status) {
+                        resove(data);
+                    } else if (event.type === 'exception') {
+                        reject(event.message);
+                    } else {
+                        reject(event.message);
+                    }
+                }, { escape: false });
+            });
+        }
+    }
+    </script>
+    </html>
+</apex:page>

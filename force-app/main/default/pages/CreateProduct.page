@@ -1,0 +1,173 @@
+<apex:page standardController="Goods__c"
+            extensions="GoodsInfoExtension">
+<head>
+    <apex:includeScript value="{!URLFOR($Resource.JQuery)}" />
+    <script src='/soap/ajax/41.0/connection.js'></script>
+    <script src='/soap/ajax/41.0/apex.js'></script>
+    <apex:sectionHeader title="Hello World" subtitle="欢迎小伙伴们" help="" />
+</head>
+
+
+
+<body>
+    <apex:form id="myForm">
+
+        <apex:actionFunction action="{!saveAction}" name="saveActionkk" status="status" reRender="myForm" >
+            <!-- <apex:param name="saveType" assignTo="{!saveType}" value=""/> -->
+        </apex:actionFunction>
+
+        <apex:pageBlock title="MyContent" id="MyContent">
+            <apex:pageMessages />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="编辑" />
+                <apex:commandButton value="保存" onclick="return saveAction()"/>
+                <apex:commandButton value="删除" />
+                <apex:commandButton value="下一页" action="{!next}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="My Content Section" columns="2" id="theBlockSection">
+                <apex:pageBlockSectionItem id="theNameItem">
+                    <apex:outputLabel value="产品名称" for="goods_name"/>
+                    <apex:inputText value="{!goods.Name}" id="goods_name"  onchange="checkProductName(nameId)"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="thePriceItem">
+                    <apex:outputLabel value="基本价格" for="goods_basePrice"/>
+                    <apex:inputField value="{!goods.BasePrice__c}" id="goods_basePrice"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theUpperCategoryItem">
+                    <apex:outputLabel value="产品大类" for="goods_productUpperCategory"/>
+                    <apex:inputField value="{!goods.ProductUpperCategory__c}" id="goods_productUpperCategory"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theStockItem">
+                    <apex:outputLabel value="当前库存" for="goods_currentStock"/>
+                    <apex:inputField value="{!goods.CurrentStock__c}" id="goods_currentStock"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theLowerCategoryItem">
+                    <apex:outputLabel value="产品小类" for="goods_productLowerCategory"/>
+                    <apex:inputField value="{!goods.ProductLowerCategory__c}" id="goods_productLowerCategory"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theProductNoItem">
+                    <apex:outputLabel value="产品编号" for="goods_productNo"/>
+                    <apex:outputPanel id="theProductNoPanel">
+                        <apex:inputField value="{!goods.ProductNo__c}" id="goods_productNo"/>
+                        <apex:actionSupport action="{!checkProductNoUnique}" 
+                                            event="onchange"
+                                            reRender="checkCode"
+                                            status="statusCode">
+                        </apex:actionSupport>
+                        <div style="color: green;margin-left: 5px">
+                            <apex:actionStatus id="statusCode" startText="代码检查中......." stopText="{!codeUniqueMessage}"></apex:actionStatus>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theUnitItem">
+                    <apex:outputLabel value="单位" for="goods_unit"/>
+                    <apex:inputField value="{!goods.Unit__c}" id="goods_unit"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theProductCodeItem">
+                    <apex:outputLabel value="产品编码" for="goods_productCode"/>
+                    <apex:inputField value="{!goods.ProductCode__c}" id="goods_productCode"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theMaxStockItem">
+                    <apex:outputLabel value="最大库存" for="goods_maxStock"/>
+                    <apex:inputField value="{!goods.MaxStock__c}" id="goods_maxStock"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="theMinStockItem">
+                    <apex:outputLabel value="最小库存" for="goods_minStock"/>
+                    <apex:inputField value="{!goods.MinStock__c}" id="goods_minStock"/>
+                </apex:pageBlockSectionItem>
+                <!-- <apex:inputField value="{!Goods__c.Name}" />
+                <apex:inputField value="{!Goods__c.ProductUpperCategory__c}" />
+                <apex:inputField value="{!Goods__c.ProductLowerCategory__c}" />
+                <apex:inputField value="{!Goods__c.BasePrice__c}" />
+                <apex:inputField value="{!Goods__c.CurrentStock__c}" /> -->
+            </apex:pageBlockSection>
+            <!-- <apex:outputLink value="https://www.salesforce.com" id="theLink">www.salesforce.com</apex:outputLink> -->
+        </apex:pageBlock>
+
+    </apex:form>
+
+    <script>
+
+        sforce.connection.sessionId = '{!$Api.Session_ID}';
+
+
+        function saveAction() {
+            saveActionkk();
+            return false;
+        }
+
+
+        var nameId = "{!$Component.myForm.MyContent.theBlockSection.theNameItem.goods_name}";
+        var price = "{!$Component.myForm.MyContent.theBlockSection.thePriceItem.goods_basePrice}";
+        var upperCategory = "{!$Component.myForm.MyContent.theBlockSection.theUpperCategoryItem.goods_productUpperCategory}";
+        var currentStock = "{!$Component.myForm.MyContent.theBlockSection.theStockItem.goods_currentStock}";
+        var lowerCategory = "{!$Component.myForm.MyContent.theBlockSection.theLowerCategoryItem.goods_productLowerCategory}";
+        var productNo = "{!$Component.myForm.MyContent.theBlockSection.theProductNoItem.theProductNoPanel.goods_productNo}";
+        var unit = "{!$Component.myForm.MyContent.theBlockSection.theUnitItem.goods_unit}";
+        var maxStock = "{!$Component.myForm.MyContent.theBlockSection.theMaxStockItem.goods_maxStock}";
+        var minStock = "{!$Component.myForm.MyContent.theBlockSection.theMinStockItem.goods_minStock}";
+        
+        $(document).ready(function() {
+            // callbackGetGoodsInfoByName('产品7');
+           
+        });
+
+        var result = null;
+        function callbackGetGoodsInfoByName(name) {
+            result = sforce.apex.execute('GetProductInfoController','getGoodsInfoByName',{name:name});
+            var nameInfo = document.getElementById(nameId);
+            $(nameInfo).val(result[0].Name);
+
+            var priceInfo = document.getElementById(price);
+            $(priceInfo).val(result[0].BasePrice__c);
+
+            var upperCategoryInfo = document.getElementById(upperCategory);
+            $(upperCategoryInfo).val(result[0].ProductUpperCategory__c);
+
+            var currentStockInfo = document.getElementById(currentStock);
+            $(currentStockInfo).val(result[0].CurrentStock__c);
+
+            var lowerCategoryInfo = document.getElementById(lowerCategory);
+            $(lowerCategoryInfo).val(result[0].ProductLowerCategory__c);
+
+            var productNoInfo = document.getElementById(productNo);
+            $(productNoInfo).val(result[0].ProductNo__c);
+
+            var unitInfo = document.getElementById(unit);
+            $(unitInfo).val(result[0].Unit__c);
+
+            var maxStockInfo = document.getElementById(maxStock);
+            $(maxStockInfo).val(result[0].MaxStock__c);
+
+            var minStockInfo = document.getElementById(minStock);
+            $(minStockInfo).val(result[0].MinStock__c);
+        }
+
+
+        //检查产品名字是否唯一
+        function checkProductName(sourceId){
+            console.log(sourceId);
+            var ctl = document.getElementById(sourceId);
+            console.log(ctl);
+            var pName = $(ctl).val();
+            console.log(pName);
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.GoodsInfoExtension.checkProductNameUnique}',
+                pName,
+                function(result, event) {
+                    if(event.status) {
+                        if(result) {
+                            alert('产品名称可用');
+                        }else {
+                            alert('产品名称重复');
+                        }
+                    }else {
+                        alert(event.message);
+                    }
+                },{escape: true}
+            );
+        }
+    </script>
+
+</body>
+</apex:page>

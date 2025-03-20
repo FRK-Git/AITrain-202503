@@ -1,0 +1,39 @@
+<aura:component implements="force:appHostable,force:hasRecordId,lightning:actionOverride,lightning:hasPageReference,flexipage:availableForAllPageTypes,force:lightningQuickAction,flexipage:availableForRecordHome" controller="TestLightningComponentController">
+   
+   <aura:attribute name="goods_Name" type="String" default="产品1" />
+   <aura:attribute name="goods_Id" type="String" default="a0C5g000000wvTxEAI" />
+
+    <lightning:card footer="Card Footer" title="Hello">
+        <aura:set attribute="actions">
+            <lightning:button label="查询" onclick="{!c.showQueryGoodsByName}" />
+        </aura:set>
+        <ui:inputText label="请输入名称" value="{!v.goods_Name}" />
+    </lightning:card>
+
+    <lightning:card title="Show">    
+        <lightning:recordEditForm recordId="{!v.goods_Id}" objectApiName="Goods__c">
+            <lightning:messages />
+            <lightning:outputField fieldName="Name" />
+            <lightning:outputField fieldName="ProductNo__c"/>
+            <lightning:outputField fieldName="ProductCode__c"/>
+            <lightning:outputField fieldName="BasePrice__c"/>
+            <lightning:outputField fieldName="CurrentStock__c"/>
+            <lightning:outputField fieldName="MaxStock__c"/>
+            <lightning:outputField fieldName="MinStock__c"/>
+        </lightning:recordEditForm>
+    </lightning:card>
+
+    <br/>
+
+    <aura:attribute name="myGoodsData" type="Object" />
+    <aura:attribute name="myGoodsColumns" type="List" />
+    <aura:handler name="init" value="{! this }" action="{!c.init}" />
+    <lightning:datatable data="{!v.myGoodsData}" 
+                             columns="{!v.myGoodsColumns}"
+                             keyField="Id"
+                             hideCheckboxColumn="true"/>
+
+    
+
+
+</aura:component>

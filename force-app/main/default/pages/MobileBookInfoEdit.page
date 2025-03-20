@@ -1,0 +1,190 @@
+<apex:page showHeader="true" standardStylesheets="false" sidebar="false" applyHtmlTag="true" applyBodyTag="false" lightningStylesheets="false" docType="html-5.0" standardController="BookInfo__c" extensions="BookInfoEditExtension">
+
+    <html xmlns:v-model="https://cn.vuejs.org" xmlns:v-on="https://cn.vuejs.org" xmlns:v-bind="https://cn.vuejs.org" xmlns:v-for="https://cn.vuejs.org" xmlns:v-slot="https://cn.vuejs.org" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:slds />
+
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <apex:stylesheet value="{!URLFOR($Resource.vant, 'vant/vant/index.css')}"/>
+        <style type="text/css">
+		        
+        </style>
+    </head>
+    <body>
+        <div id="app" class="slds-scope" style="width: 100%;height: 100%;max-width: 1499px;">
+            <div style="width: 100%;">
+                <article class="slds-card" >
+                    <div class="slds-card__header slds-grid">
+                        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <span class="slds-avatar">
+                                <span class="slds-icon_container slds-icon-standard-quip">
+                                    <svg class="slds-icon slds-icon-custom-12" aria-hidden="true" style="background: #1797C0;">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#quip"></use>
+                                    </svg>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <a href="#" class="slds-card__header-link slds-truncate" title="BookInfo">
+                                    <span>图书信息</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">     
+                            <div class="slds-icon-eq slds-is-animated" title="Description of the icon when needed">
+                                <div class="slds-icon-eq__bar"></div>
+                                <div class="slds-icon-eq__bar"></div>
+                                <div class="slds-icon-eq__bar"></div>
+                                <span class="slds-assistive-text">Text alternative when needed</span>
+                            </div>
+                        </div>
+                        </header>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner" >
+                        <van-cell-group inset="true">
+						  <van-cell title="图书名称" v-bind:value="bookInfo.bookName" />
+						  <van-cell title="单元格" value="内容" label="描述信息" is-link="true"/>
+						</van-cell-group>
+                    </div>
+                    <footer class="slds-card__footer">
+                        <button type="button" class="slds-button slds-button_neutral" v-on:click="cancelSave">取消</button>
+                        <button type="button" class="slds-button slds-button_brand" v-on:click="saveInfo">保存</button>
+                    </footer>
+                </article>
+            </div>
+        </div>
+    </body>
+    <apex:includeScript value="{!$Resource.Vue}" />
+    <apex:includeScript value="{!URLFOR($Resource.vant, 'vant/vant/vant.js')}" />
+    <script type="text/javascript">
+    const app = new Vue({
+        el: '#app',
+        data: {
+
+            bookInfo: {
+                id: '',                     //图书信息Id
+                bookName: '中华上下五千年',               //图书名称
+                subjectType: '',            //学科类型
+                publisher: '',              //出版社
+                publishDate: '',            //出版日期
+                author: '',                 //作者
+                price: 0,                   //价格
+                ownerId: '',                //所有人
+                introduction: ''            //简介
+            }
+        },
+        methods: {
+            saveInfo: function() {
+
+            },
+
+            cancelSave: function() {
+
+            }
+
+        },
+        watch: {
+
+        },
+        computed: {
+
+        },
+        mounted: function() {
+            
+        }
+    });
+
+    /*
+     * 执行远程方法 最多5个参数
+     * @param methodName 方法名
+     * @param params 参数列表
+     * @author xj
+     */
+    function remoteAction(methodName, ...params) {
+        if (params != null && params != undefined && params.length > 0) {
+            if (params.length == 1) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 2) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 3) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 4) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], params[3], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else if (params.length == 5) {
+                return new Promise((resove, reject) => {
+                    Visualforce.remoting.Manager.invokeAction(methodName, params[0], params[1], params[2], params[3], params[4], (data, event) => {
+                        if (event.status) {
+                            resove(data);
+                        } else if (event.type === 'exception') {
+                            reject(event.message);
+                        } else {
+                            reject(event.message);
+                        }
+                    }, { escape: false });
+                });
+            } else {
+                return new Promise((resove, reject) => {
+                    reject('参数过多不支持此方法!');
+                });
+            }
+        } else {
+             return new Promise((resove, reject) => {
+                Visualforce.remoting.Manager.invokeAction(methodName, ...params, (data, event) => {
+                    if (event.status) {
+                        resove(data);
+                    } else if (event.type === 'exception') {
+                        reject(event.message);
+                    } else {
+                        reject(event.message);
+                    }
+                }, { escape: false });
+            });
+        }
+    }
+    </script>
+    </html>
+</apex:page>

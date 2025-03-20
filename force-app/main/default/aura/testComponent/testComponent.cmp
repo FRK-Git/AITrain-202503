@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,force:hasRecordId,lightning:actionOverride,lightning:hasPageReference,flexipage:availableForAllPageTypes,force:lightningQuickAction,flexipage:availableForRecordHome" controller="TestComponentController">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="selectMap" type="Map" />
+
+    <lightning:select name="select4" onchange="{!c.getSelectOnchange}" aura:id="select4">
+        <aura:iteration items="{!v.selectMap}" var="item" indexVar="index">
+            <option value="{!item.value}">{!item.key}</option>
+        </aura:iteration>                           
+    </lightning:select>
+
+</aura:component>

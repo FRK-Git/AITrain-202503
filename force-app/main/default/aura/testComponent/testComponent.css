@@ -1,0 +1,6 @@
+.THIS {}
+
+.THIS .testComponent{
+    color: red !important;
+    font-size: 16px !important;
+}
